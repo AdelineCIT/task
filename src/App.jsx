@@ -1,35 +1,81 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { useState } from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import "./App.css";
+import ToDoList from "./Components/ToDoList";
 function App() {
-  const [count, setCount] = useState(0)
+  const [todoList, setTodoList] = useState([
+    {
+      id: 1,
+      description: "Buy Groceries",
+      status: "New",
+    },
+    {
+      id: 2,
+      description: "Finish project report",
+      status: "In Progress",
+    },
+    {
+      id: 3,
+      description: "Call mom",
+      status: "Completed",
+    },
+  ]);
 
+  const [newTodo, setNewTodo] = useState("");
+
+  const addTodo = () => {
+    if (newTodo.trim() === "") return;
+
+    const newId = todoList.length + 1;
+    const newTodoItem = {
+      id: newId,
+      description: newTodo,
+      status: "New",
+    };
+
+    setTodoList([...todoList, newTodoItem]);
+    setNewTodo("");
+  };
+
+  const changeStatus = (id, newStatus) => {
+    const updatedList = todoList.map((item) => {
+      if (item.id === id) {
+        return { ...item, status: newStatus };
+      }
+      return item;
+    });
+
+    setTodoList(updatedList);
+  };
+
+  const deleteTodo = (id) => {
+    const updatedList = todoList.filter((item) => item.id !== id);
+    setTodoList(updatedList);
+  };
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h1>TASK LIST</h1>
+      <div className="App">
+        <h3>What do I need to do?</h3>
+        <div className="todo-form">
+          <input
+            type="text"
+            placeholder="Add a new task"
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+          />
+          <button class="btn btn-secondary btn-sm" onClick={addTodo}>
+            Add
+          </button>
+        </div>
+        <ToDoList
+          todoList={todoList}
+          onChangeStatus={changeStatus}
+          onDelete={deleteTodo}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
