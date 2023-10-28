@@ -1,3 +1,6 @@
+import Header from "./Components/Header";
+import Content from "./Components/Content";
+import { UserProvider } from "./Providers/UserProvider";
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
@@ -54,6 +57,10 @@ function App() {
   };
   return (
     <>
+      <UserProvider>
+        <Header></Header>
+        <Content></Content>
+      </UserProvider>
       <h1>TASK LIST</h1>
       <div className="App">
         <h3>What do I need to do?</h3>
